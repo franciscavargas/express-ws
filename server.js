@@ -14,14 +14,35 @@ app.use(formidable());
 
 // Define a route to deal with a POST request
 app.post("/create-post", function(req, res) {
-  console.log(req.fields);
-});
+  // Read file (Argument 1: the location of the file you want to write to ,Argument 2: the callback function)
+  fs.readFile(__dirname + "/data/posts.json", function(error, file) {
+    var parsedFile = JSON.parse(file);
+    // console.log(file.toString());
 
-// The method we need to write to your hard drive is fs.writeFile
-fs.writeFile("location-of-your-file-goes-here", yourData, function(error) {
-  // do something
-});
+    // The method we need to write to your hard drive is fs.writeFile (Argument 1: the location of the file you want to write to
+    // Argument 2: the data you want to write
+    // Argument 3: the callback function
+    var yourData = req.fields.blogpost;
+    var date = Date.now();
 
+    var blogpostsLists = parsedFile;
+
+    blogpostsLists[date] = yourData;
+
+    console.log(blogpostsLists);
+
+    fs.writeFile(
+      __dirname + "/data/posts.json",
+      JSON.stringify(blogpostsLists),
+      function(error) {
+        if (error) {
+          console.log("Error!", error);
+        }
+        return;
+      }
+    );
+  });
+});
 // App listen takes 2 parameters: a port and a callback argument
 app.listen(3000, function() {
   console.log("Server is listening on port 3000. Ready to accept requests!");
