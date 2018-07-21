@@ -43,6 +43,11 @@ app.post("/create-post", function(req, res) {
     );
   });
 });
+
+app.get("/blogLists", function(req, res) {
+  res.sendFile(__dirname + "/data/posts.json");
+});
+
 // App listen takes 2 parameters: a port and a callback argument
 app.listen(3000, function() {
   console.log("Server is listening on port 3000. Ready to accept requests!");
